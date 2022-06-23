@@ -3,7 +3,10 @@ const { Routes } = require('discord-api-types/v9');
 const fs = require('fs');
 // Place your client and guild ids here
 const clientId = '988254981704527872';
-const guildId = '294925791136055297';
+//avendoria
+//const guildId = '294925791136055297';
+//pokellation
+const guildId = '897537920452395018';
 
 module.exports = (client) => {
 
