@@ -37,7 +37,7 @@ module.exports = (client) => {
                 }else{
                     await rest.put(
                         Routes.applicationCommands(clientId),
-                        { body: commands },
+                        { body: client.commandArray },
                     );
                 }
                 console.log('Successfully reloaded application (/) commands.');
