@@ -20,6 +20,6 @@ RUN rm .env
 
 #copy in the production env
 #difference being this one doesn't have an env set
-COPY .env.production .env
+COPY .env.production.local .env
 
 CMD [ "node", "src/index.js" ]
