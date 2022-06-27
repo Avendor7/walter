@@ -34,12 +34,18 @@ module.exports = (client) => {
         (async () => {
             try {
                 console.log('Started refreshing application (/) commands.');
-
-                await rest.put(
-                    Routes.applicationGuildCommands(clientId, guildId),
-                    { body: client.commandArray },
-                );
-
+                //run dev commands in a guild. 
+                if (process.env.env == "local"){
+                    await rest.put(
+                        Routes.applicationGuildCommands(clientId, guildId),
+                        { body: client.commandArray },
+                    );
+                }else{
+                    await rest.put(
+                        Routes.applicationCommands(clientId),
+                        { body: commands },
+                    );
+                }
                 console.log('Successfully reloaded application (/) commands.');
             } catch (error) {
                 console.error(error);
