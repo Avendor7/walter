@@ -3,15 +3,8 @@ const { Routes } = require('discord-api-types/v9');
 const fs = require('fs');
 // Place your client and guild ids here
 const clientId = '988254981704527872';
-//avendoria
-//const guildId = '294925791136055297';
-//pokellation
-const guildId = '897537920452395018';
 
 module.exports = (client) => {
-
-
-
 
     client.handleCommands = async (commandFolders, path) => {
         client.commandArray = [];
@@ -27,16 +20,13 @@ module.exports = (client) => {
             }
         }
 
-
-
         const rest = new REST({ version: '9' }).setToken(process.env.token);
 
         (async () => {
             try {
                 console.log('Started refreshing application (/) commands.');
-
                 await rest.put(
-                    Routes.applicationGuildCommands(clientId, guildId),
+                    Routes.applicationCommands(clientId),
                     { body: client.commandArray },
                 );
 

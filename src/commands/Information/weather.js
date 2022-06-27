@@ -1,8 +1,6 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const axios = require('axios');
 
-
-
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('weathershare')
@@ -21,7 +19,6 @@ module.exports = {
             .get(urlString)
             .then(res => {
                 reply = res.data.location.name + " " + res.data.location.region + " " + res.data.current.temp_c +"°C " + res.data.current.temp_f+"°F";
-
             })
             .catch(error => {
                 console.error(error);
