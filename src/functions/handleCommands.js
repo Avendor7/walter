@@ -28,13 +28,15 @@ module.exports = (client) => {
         (async () => {
             try {
                 console.log('Started refreshing application (/) commands.');
-                //run dev commands in a guild. 
+                //run dev commands in a guild.
                 if (process.env.env == "local"){
+                    console.log("Running in dev mode");
                     await rest.put(
                         Routes.applicationGuildCommands(clientId, guildId),
                         { body: client.commandArray },
                     );
                 }else{
+                    console.log("Running in production mode");
                     await rest.put(
                         Routes.applicationCommands(clientId),
                         { body: client.commandArray },
