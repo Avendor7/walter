@@ -10,9 +10,6 @@ const guildId = '294925791136055297';
 
 module.exports = (client) => {
 
-
-
-
     client.handleCommands = async (commandFolders, path) => {
         client.commandArray = [];
 
@@ -26,9 +23,6 @@ module.exports = (client) => {
                 client.commandArray.push(command.data.toJSON());
             }
         }
-
-
-
         const rest = new REST({ version: '9' }).setToken(process.env.token);
 
         (async () => {
