@@ -15,11 +15,4 @@ RUN npm install
 # Bundle app source
 COPY . .
 
-#remove any local env during build process
-RUN rm .env
-
-#copy in the production env
-#difference being this one doesn't have an env set
-COPY .env.production.local .env
-
 CMD [ "node", "src/index.js" ]
