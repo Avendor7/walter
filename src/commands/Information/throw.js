@@ -1,9 +1,5 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
-
-thrownItems = [
-    "cheese",
-    "tomatoes"
-];
+data = require('../../static/throwCommands.js');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -16,6 +12,6 @@ module.exports = {
                 .setRequired(true)
         ),
     async execute(interaction) {
-        return interaction.reply(`${interaction.user} Threw ${thrownItems[Math.floor(Math.random()*thrownItems.length)]} ${interaction.options.getUser('user')}`)
+        return interaction.reply(`${interaction.user} Threw ${data.thrownItems[Math.floor(Math.random()*data.thrownItems.length)]} ${interaction.options.getUser('user')}`)
     },
 };
