@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
-data = require('../../static/throwCommands.js');
+data = require('../../static/commands.js');
 
 module.exports = {
     data: new SlashCommandBuilder()
