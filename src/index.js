@@ -1,6 +1,6 @@
-const {Client, Intents, Collection} = require('discord.js');
+const {Client, GatewayIntentBits, Collection} = require('discord.js');
 const fs = require('fs');
-const client = new Client({intents: [Intents.FLAGS.GUILDS]});
+const client = new Client({intents: GatewayIntentBits.Guilds});
 require('dotenv').config();
 
 client.commands = new Collection();
