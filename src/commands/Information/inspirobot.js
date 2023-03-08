@@ -14,10 +14,9 @@ module.exports = {
         await axios
             .get(urlString)
             .then(res => {
-                //reply = res.data.location.name + " " + res.data.location.region + " " + res.data.current.temp_c +"°C " + res.data.current.temp_f+"°F";
-                //get the image
-                //download it
-                //send it (take a look at the weather code in the dev branch for this)
+                //Discord magically handles the jpeg URL the API sends back. 
+                //Somehow it downloads it and embeds it for me. yay
+                reply = res.data;
             })
             .catch(error => {
                 console.error(error);
