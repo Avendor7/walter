@@ -3,7 +3,7 @@ const { Routes } = require('discord-api-types/v9');
 const fs = require('fs');
 // Place your client and guild ids here
 //weathershare#9331
-const clientId = '988254981704527872';
+const clientId = process.env.clientid;
 //avendoria
 const guildId = '294925791136055297';
 
