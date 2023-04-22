@@ -1,10 +1,9 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const axios = require('axios');
 
-async function formatReply(response){
-
-    reply = response.location.name + " " + response.location.region + " " + response.current.temp_c +"°C " + response.current.temp_f+"°F";
+function formatReply(response){
     
+    return response.location.name + " " + response.location.region + " " + response.current.temp_c +"°C " + response.current.temp_f+"°F";
 }
 
 module.exports = {
@@ -25,7 +24,7 @@ module.exports = {
             .get(urlString)
             .then(res => {
                 reply = formatReply(res.data);
-                
+                console.log(reply);
             })
             .catch(error => {
                 console.error(error);
