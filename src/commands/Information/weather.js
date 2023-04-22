@@ -1,6 +1,12 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const axios = require('axios');
 
+async function formatReply(response){
+
+    reply = response.location.name + " " + response.location.region + " " + response.current.temp_c +"°C " + response.current.temp_f+"°F";
+    
+}
+
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('weathershare')
@@ -18,7 +24,8 @@ module.exports = {
         await axios
             .get(urlString)
             .then(res => {
-                reply = res.data.location.name + " " + res.data.location.region + " " + res.data.current.temp_c +"°C " + res.data.current.temp_f+"°F";
+                reply = formatReply(res.data);
+                
             })
             .catch(error => {
                 console.error(error);
