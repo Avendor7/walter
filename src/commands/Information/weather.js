@@ -1,15 +1,29 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
+const { SlashCommandBuilder, EmbedBuilder } = require('@discordjs/builders');
 const axios = require('axios');
 
-function formatReply(response){
-    
-    return response.location.name + " " + response.location.region + " " + response.current.temp_c +"°C " + response.current.temp_f+"°F";
+//creates a formatted Discord Embeded object to reply to a weather request
+function embeddedReply(response){
+    return new EmbedBuilder()
+        .setTitle(response.location.name + ", " + response.location.region)
+        .setURL('https://www.weatherapi.com/')
+        .setThumbnail('https:' + response.current.condition.icon)
+        .addFields(
+            { name: 'Condition ', value: response.current.condition.text},
+        )
+        .addFields(
+            { name: 'Temperature (feels like)', value: response.current.temp_c + "°C (" + response.current.feelslike_c + "°C) • " + response.current.temp_f + "°F (" + response.current.feelslike_f + "°F) " },
+        )
+        .addFields(
+            { name: 'Wind ', value: response.current.wind_kph + " KPH • " + response.current.wind_mph + " MPH"},
+        )
+        .setTimestamp(new Date(response.current.last_updated))
+	    .setFooter({ text: 'Last Updated'});
 }
 
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('weathershare')
-        .setDescription('Gets the weather')
+	    .setDescription('Gets the weather')
         .addStringOption(option =>
             option.setName('location')
                 .setDescription('City/Town')
@@ -23,13 +37,13 @@ module.exports = {
         await axios
             .get(urlString)
             .then(res => {
-                reply = formatReply(res.data);
-                console.log(reply);
+                //generate the embedded reply using the returned data
+                reply = embeddedReply(res.data);
             })
             .catch(error => {
                 console.error(error);
             });
 
-        await interaction.reply(reply);
+        await interaction.reply({embeds: [reply]});
     },
 };
