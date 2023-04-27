@@ -1,6 +1,12 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('@discordjs/builders');
 const axios = require('axios');
 
+const { DateTime } = require("luxon");
+
+function toUTC(datetime, timezone){
+    let local = DateTime.fromSQL(datetime).setZone(timezone);
+    return local.setZone("UTC").toJSDate();
+}
 //creates a formatted Discord Embeded object to reply to a weather request
 function embeddedReply(response){
     return new EmbedBuilder()
@@ -16,8 +22,8 @@ function embeddedReply(response){
         .addFields(
             { name: 'Wind ', value: response.current.wind_kph + " KPH • " + response.current.wind_mph + " MPH"},
         )
-        .setTimestamp(new Date(response.current.last_updated))
-	    .setFooter({ text: 'Last Updated'});
+        .setTimestamp(toUTC(response.current.last_updated, response.location.tz_id))
+	    .setFooter({ text: 'Last Updated',});
 }
 
 module.exports = {
