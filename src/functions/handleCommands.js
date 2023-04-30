@@ -1,6 +1,11 @@
 const { REST } = require('@discordjs/rest');
 const { Routes } = require('discord-api-types/v9');
 const fs = require('fs');
+
+const getRepoInfo = require('git-repo-info');
+
+const info = getRepoInfo();
+
 // Place your client and guild ids here
 //weathershare#9331
 const clientId = process.env.clientid;
@@ -27,6 +32,8 @@ module.exports = (client) => {
         (async () => {
             try {
                 console.log('Started refreshing application (/) commands.');
+                console.log('Git Tag: ' + info.tag);
+                console.log('Git Commit hash: ' + info.abbreviatedSha)
                 //run dev commands in a guild.
                 if (process.env.env == "local"){
                     console.log("Running in dev mode");
