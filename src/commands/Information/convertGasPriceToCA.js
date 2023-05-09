@@ -3,11 +3,7 @@ data = require('../../static/commands.js');
 const axios = require('axios');
 
 async function getExchangeRate(){
-    await axios
-        .get('https://open.er-api.com/v6/latest/USD')
-        .then(res => {
-            return res.data.rates.CAD;
-        });
+    
 }
 
 module.exports = {
@@ -22,10 +18,11 @@ module.exports = {
         ),
     async execute(interaction) {
 
-        let USDperGallon = interaction.options.getNumber('USDperGallon');
-        let CADperLitre = USDperGallon * getExchangeRate();
-        console.log(getExchangeRate());
-        return interaction.reply(`${interaction.options.getNumber('usdpergallon')}`);
+        const USDperGallon = interaction.options.getNumber('usdpergallon'); 
+        const response = await axios.get('https://open.er-api.com/v6/latest/USD');
+        const LITERS_PER_GALLON = 3.78541; // number of liters in a gallon
+        const cadPerLitre = (USDperGallon * response.data.rates.CAD) / (LITERS_PER_GALLON);
+        return interaction.reply(cadPerLitre.toFixed(2));
     },
     
 };
