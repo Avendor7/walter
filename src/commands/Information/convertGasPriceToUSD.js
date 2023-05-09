@@ -2,10 +2,6 @@ const { SlashCommandBuilder } = require('@discordjs/builders');
 data = require('../../static/commands.js');
 const axios = require('axios');
 
-async function getExchangeRate(){
-    
-}
-
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('convertlitrestogallons')
@@ -22,7 +18,7 @@ module.exports = {
         const response = await axios.get('https://open.er-api.com/v6/latest/CAD');
         const GALLONS_PER_LITRE = 0.264172; // number of liters in a gallon
         const usdPerGallon = (cadPerLitre * response.data.rates.USD) / (GALLONS_PER_LITRE);
-        return interaction.reply(`$${cadPerLitre} USD/gallon is $${usdPerGallon.toFixed(2)} CAD/litre`);
+        return interaction.reply(`$${cadPerLitre} CAD/litre is $${usdPerGallon.toFixed(2)} USD/gallon`);
 
     },
     
