@@ -128,3 +128,4 @@ dist
 
 
 src/static/commands.js
+.vscode/
