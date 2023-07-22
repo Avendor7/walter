@@ -12,15 +12,15 @@ function embeddedReply(response){
     return new EmbedBuilder()
         .setTitle(response.location.name + ", " + response.location.region)
         .setURL('https://www.weatherapi.com/')
-        .setThumbnail('https:' + response.current.condition.icon)
+        .setThumbnail('https:' + response.forecast.forecastday[0].day.condition.icon)
         .addFields(
-            { name: 'Condition ', value: response.current.condition.text},
+            { name: 'Condition ', value: response.forecast.forecastday[0].day.condition.text},
         )
         .addFields(
-            { name: 'Temperature (feels like)', value: response.current.temp_c + "°C (" + response.current.feelslike_c + "°C) • " + response.current.temp_f + "°F (" + response.current.feelslike_f + "°F) " },
+            { name: 'High Tomorrow', value: response.forecast.forecastday[0].day.maxtemp_c + "°C • " + response.forecast.forecastday[0].day.maxtemp_f + "°F" },
         )
         .addFields(
-            { name: 'Wind ', value: response.current.wind_kph + " KPH • " + response.current.wind_mph + " MPH"},
+            { name: 'Low Tomorrow', value: response.forecast.forecastday[0].day.mintemp_c + "°C • " + response.forecast.forecastday[0].day.mintemp_f + "°F" },
         )
         .setTimestamp(toUTC(response.current.last_updated, response.location.tz_id))
 	    .setFooter({ text: 'Last Updated',});
@@ -38,7 +38,7 @@ module.exports = {
 
         const location = interaction.options.getString('location');
         let reply ="";
-        let urlString = "https://api.weatherapi.com/v1/current.json?key=" + process.env.weatherapitoken + "&q=" + location;
+        let urlString = "https://api.weatherapi.com/v1/forecast.json?key=" + process.env.weatherapitoken + "&q=" + location + "&days=1";
         
         await axios
             .get(urlString)
