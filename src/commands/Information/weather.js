@@ -20,7 +20,13 @@ function embeddedReply(response){
             { name: 'Temperature (feels like)', value: response.current.temp_c + "°C (" + response.current.feelslike_c + "°C) • " + response.current.temp_f + "°F (" + response.current.feelslike_f + "°F) " },
         )
         .addFields(
-            { name: 'Wind ', value: response.current.wind_kph + " KPH • " + response.current.wind_mph + " MPH"},
+            { name: 'Wind', value: response.current.wind_kph + " KPH • " + response.current.wind_mph + " MPH"},
+        )
+        .addFields(
+            { name: 'UV Index', value: response.current.uv.toString()},
+        )
+        .addFields(
+            { name: 'Air Quality (PM2.5)', value: response.current.air_quality.pm2_5.toFixed(2)},
         )
         .setTimestamp(toUTC(response.current.last_updated, response.location.tz_id))
 	    .setFooter({ text: 'Last Updated',});
@@ -38,7 +44,7 @@ module.exports = {
 
         const location = interaction.options.getString('location');
         let reply ="";
-        let urlString = "https://api.weatherapi.com/v1/current.json?key=" + process.env.weatherapitoken + "&q=" + location;
+        let urlString = "https://api.weatherapi.com/v1/current.json?key=" + process.env.weatherapitoken + "&q=" + location + "&aqi=yes" + "&days=1";
         
         await axios
             .get(urlString)
