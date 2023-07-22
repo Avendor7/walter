@@ -9,7 +9,6 @@ function toUTC(datetime, timezone){
 }
 //creates a formatted Discord Embeded object to reply to a weather request
 function embeddedReply(response, interaction){
-    console.log(interaction.options.getBoolean('displaylocation'));
     if(!interaction.options.getBoolean('displaylocation')){
         response.location.name = "Redacted";
         response.location.region = "Redacted";
