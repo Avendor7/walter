@@ -8,7 +8,11 @@ function toUTC(datetime, timezone){
     return local.setZone("UTC").toJSDate();
 }
 //creates a formatted Discord Embeded object to reply to a weather request
-function embeddedReply(response){
+function embeddedReply(response, interaction){
+    if(!interaction.options.getBoolean('displaylocation')){
+        response.location.name = "Redacted";
+        response.location.region = "Redacted";
+    }
     return new EmbedBuilder()
         .setTitle(response.location.name + ", " + response.location.region)
         .setURL('https://www.weatherapi.com/')
@@ -39,7 +43,11 @@ module.exports = {
         .addStringOption(option =>
             option.setName('location')
                 .setDescription('City/Town')
-                .setRequired(true)),
+                .setRequired(true))
+        .addBooleanOption(option =>
+            option.setName('displaylocation')
+                .setDescription('True/False share your city/state in reply')
+                .setRequired(false)),
     async execute(interaction) {
 
         const location = interaction.options.getString('location');
@@ -50,7 +58,7 @@ module.exports = {
             .get(urlString)
             .then(res => {
                 //generate the embedded reply using the returned data
-                reply = embeddedReply(res.data);
+                reply = embeddedReply(res.data, interaction);
             })
             .catch(error => {
                 console.error(error);
