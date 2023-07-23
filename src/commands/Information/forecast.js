@@ -9,6 +9,10 @@ function toUTC(datetime, timezone){
 }
 //creates a formatted Discord Embeded object to reply to a weather request
 function embeddedReply(response){
+    if(!interaction.options.getBoolean('displaylocation')){
+        response.location.name = "Redacted";
+        response.location.region = "Redacted";
+    }
     return new EmbedBuilder()
         .setTitle(response.location.name + ", " + response.location.region)
         .setURL('https://www.weatherapi.com/')
@@ -33,7 +37,11 @@ module.exports = {
         .addStringOption(option =>
             option.setName('location')
                 .setDescription('City/Town')
-                .setRequired(true)),
+                .setRequired(true))
+        .addBooleanOption(option =>
+            option.setName('displaylocation')
+                .setDescription('True/False share your city/state in reply')
+                .setRequired(false)),
     async execute(interaction) {
 
         const location = interaction.options.getString('location');
