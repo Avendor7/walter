@@ -8,7 +8,7 @@ function toUTC(datetime, timezone){
     return local.setZone("UTC").toJSDate();
 }
 //creates a formatted Discord Embeded object to reply to a weather request
-function embeddedReply(response){
+function embeddedReply(response, interaction){
     if(!interaction.options.getBoolean('displaylocation')){
         response.location.name = "Redacted";
         response.location.region = "Redacted";
@@ -52,7 +52,7 @@ module.exports = {
             .get(urlString)
             .then(res => {
                 //generate the embedded reply using the returned data
-                reply = embeddedReply(res.data);
+                reply = embeddedReply(res.data, interaction);
             })
             .catch(error => {
                 console.error(error);
