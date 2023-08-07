@@ -15,5 +15,11 @@ const eventFiles =  fs.readdirSync("./src/events").filter(file => file.endsWith(
     }
     client.handleEvents(eventFiles, "./src/events");
     client.handleCommands(commandFolders, "./src/commands");
+    client.on("ready", () => {
+        client.guilds.cache.forEach( (guild) => {
+            console.log(`${guild.name} | ${guild.memberCount} | ${guild.id}`)
+            })
+    });
+    
     client.login(process.env.token);
 })();
