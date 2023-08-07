@@ -29,9 +29,9 @@ function embeddedReply(response, interaction){
         .addFields(
             { name: 'UV Index', value: response.current.uv.toString()},
         )
-        .addFields(
-            { name: 'Air Quality (PM2.5)', value: response.current.air_quality.pm2_5.toFixed(2)},
-        )
+        // .addFields(
+        //     { name: 'Air Quality (PM2.5)', value: response.current.air_quality.pm2_5.toFixed(2)},
+        // )
         .setTimestamp(toUTC(response.current.last_updated, response.location.tz_id))
 	    .setFooter({ text: 'Last Updated',});
 }
