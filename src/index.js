@@ -1,18 +1,18 @@
-const {Client, GatewayIntentBits, Collection} = require('discord.js');
-const fs = require('fs');
+import { Client, GatewayIntentBits, Collection } from 'discord.js';
+import * as fs from 'fs';
 const client = new Client({intents: GatewayIntentBits.Guilds});
-require('dotenv').config();
+import 'dotenv/config';
 
 client.commands = new Collection();
 
-const functions =  fs.readdirSync("./src/functions").filter(file => file.endsWith("js"));
+const functions =  fs.readdirSync("./src/functions").filter(file => file.endsWith("ts"));
 const commandFolders =  fs.readdirSync("./src/commands");
-const eventFiles =  fs.readdirSync("./src/events").filter(file => file.endsWith("js"));
+const eventFiles =  fs.readdirSync("./src/events").filter(file => file.endsWith("ts"));
 
 (async () => {
-    for(file of functions){
-        require(`./functions/${file}`)(client);
-    }
+for (const file of functions) {
+    (await import(`./functions/${file}`)).default(client);
+}
     client.handleEvents(eventFiles, "./src/events");
     client.handleCommands(commandFolders, "./src/commands");
     client.on("ready", () => {
