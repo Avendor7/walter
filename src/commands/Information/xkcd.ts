@@ -1,4 +1,4 @@
-import { SlashCommandBuilder, ChatInputCommandInteraction } from 'discord.js';
+import { SlashCommandBuilder, ChatInputCommandInteraction, EmbedBuilder } from 'discord.js';
 import axios from 'axios';
 
 export default {
@@ -17,7 +17,13 @@ export default {
 		try {
 			const { data } = await axios.get(`https://xkcd.com/${number ?? 'info'}.0.json`);
 
-			await interaction.reply(data.img);
+			const embed = new EmbedBuilder()
+				.setTitle(data.title)
+				.setImage(data.img)
+				.setFooter({ text: data.alt })
+				.setURL(`https://xkcd.com/${data.num}`);
+
+			await interaction.reply({ embeds: [embed] });
 		} catch (error) {
 			console.error(error);
 			await interaction.reply('Failed to fetch XKCD comic.');
