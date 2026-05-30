@@ -1,9 +1,7 @@
-# Build stage
-FROM node:18-alpine AS builder
+FROM node:18-alpine
+ENV NODE_ENV=production
 WORKDIR /app
 COPY package*.json ./
-RUN npm ci
+RUN npm ci --only=production
 COPY . .
-RUN npx tsc
-
-CMD [ "npx", "tsx", "src/index.ts" ]
+CMD ["npx", "tsx", "src/index.ts"]
