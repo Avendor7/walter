@@ -5,9 +5,9 @@ import 'dotenv/config';
 
 client.commands = new Collection();
 
-const functions =  fs.readdirSync("./src/functions").filter(file => file.endsWith("ts"));
+const functions =  fs.readdirSync("./src/functions").filter(file => file.endsWith(".js"));
 const commandFolders =  fs.readdirSync("./src/commands");
-const eventFiles =  fs.readdirSync("./src/events").filter(file => file.endsWith("ts"));
+const eventFiles =  fs.readdirSync("./src/events").filter(file => file.endsWith(".js"));
 
 (async () => {
 for (const file of functions) {
