@@ -15,4 +15,4 @@ RUN npm install
 # Bundle app source
 COPY . .
 
-CMD [ "node", "src/index.js" ]
+CMD [ "npx", "tsx", "src/index.ts" ]

@@ -1,10 +1,11 @@
-import { SlashCommandBuilder } from '@discordjs/builders';
+import { SlashCommandBuilder, ChatInputCommandInteraction } from 'discord.js';
 
 export default {
-    data: new SlashCommandBuilder()
-        .setName('ping')
-        .setDescription('Replies with Pong!'),
-    async execute(interaction: any) {
-        await interaction.reply('Pong!');
-    },
+	data: new SlashCommandBuilder()
+		.setName('ping')
+		.setDescription('Replies with Pong!'),
+
+	async execute(interaction: ChatInputCommandInteraction) {
+		await interaction.reply('Pong!');
+	},
 };

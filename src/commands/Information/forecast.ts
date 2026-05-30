@@ -16,22 +16,24 @@ function embeddedReply(response: any, interaction: ChatInputCommandInteraction) 
 	return new EmbedBuilder()
 		.setTitle(response.location.name + ', ' + response.location.region)
 		.setURL('https://www.weatherapi.com/')
-		.setThumbnail('https:' + response.current.condition.icon)
-		.addFields({ name: 'Condition ', value: response.current.condition.text })
+		.setThumbnail('https:' + response.forecast.forecastday[0].day.condition.icon)
+		.addFields({ name: 'Condition ', value: response.forecast.forecastday[0].day.condition.text })
 		.addFields({
-			name: 'Temperature (feels like)',
-			value: response.current.temp_c + '°C (' + response.current.feelslike_c + '°C) • ' + response.current.temp_f + '°F (' + response.current.feelslike_f + '°F) ',
+			name: 'High Tomorrow',
+			value: response.forecast.forecastday[0].day.maxtemp_c + '°C • ' + response.forecast.forecastday[0].day.maxtemp_f + '°F',
 		})
-		.addFields({ name: 'Wind', value: response.current.wind_kph + ' KPH • ' + response.current.wind_mph + ' MPH' })
-		.addFields({ name: 'UV Index', value: response.current.uv.toString() })
+		.addFields({
+			name: 'Low Tomorrow',
+			value: response.forecast.forecastday[0].day.mintemp_c + '°C • ' + response.forecast.forecastday[0].day.mintemp_f + '°F',
+		})
 		.setTimestamp(toUTC(response.current.last_updated, response.location.tz_id))
 		.setFooter({ text: 'Last Updated' });
 }
 
 export default {
 	data: new SlashCommandBuilder()
-		.setName('weathershare')
-		.setDescription('Gets the weather')
+		.setName('forecastshare')
+		.setDescription('Gets tomorrows weather')
 		.addStringOption((option) => option.setName('location').setDescription('City/Town').setRequired(true))
 		.addBooleanOption((option) =>
 			option.setName('displaylocation').setDescription('True/False share your city/state in reply').setRequired(false),
@@ -39,7 +41,7 @@ export default {
 
 	async execute(interaction: ChatInputCommandInteraction) {
 		const location = interaction.options.getString('location');
-		const urlString = 'https://api.weatherapi.com/v1/current.json?key=' + process.env.weatherapitoken + '&q=' + location + '&aqi=yes' + '&days=1';
+		const urlString = 'https://api.weatherapi.com/v1/forecast.json?key=' + process.env.weatherapitoken + '&q=' + location + '&days=1';
 
 		try {
 			const { data } = await axios.get(urlString);
@@ -47,7 +49,7 @@ export default {
 			await interaction.reply({ embeds: [reply] });
 		} catch (error) {
 			console.error(error);
-			await interaction.reply({ content: 'Failed to fetch weather data. Check the location and try again.', ephemeral: true });
+			await interaction.reply({ content: 'Failed to fetch forecast data. Check the location and try again.', ephemeral: true });
 		}
 	},
 };
