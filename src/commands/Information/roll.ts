@@ -7,8 +7,37 @@ import { DiceParser } from '../../dice/parser.js';
 import type { RollResult } from '../../dice/types.js';
 import { addRollToHistory } from './rollhistory.js';
 
+function analyzeCrits(result: RollResult): { crits: string[]; fumbles: string[] } {
+  const crits: string[] = [];
+  const fumbles: string[] = [];
+
+  for (const roll of result.dieRolls || []) {
+    for (const raw of roll.rawRolls) {
+      if (raw === roll.sides) {
+        crits.push(`d${roll.sides} rolled max (${raw})`);
+      }
+      if (raw === 1) {
+        fumbles.push(`d${roll.sides} rolled min (${raw})`);
+      }
+    }
+  }
+
+  return { crits, fumbles };
+}
+
 function formatPlain(result: RollResult): string {
+  const { crits, fumbles } = analyzeCrits(result);
   const lines: string[] = [`🎲 **${result.expression}** = ${result.total}`];
+
+  if (crits.length > 0) {
+    lines.push('');
+    lines.push('🌟 **CRITICAL HIT!** 🌟\n' + crits.map(c => `  ✨ ${c}`).join('\n'));
+  }
+
+  if (fumbles.length > 0) {
+    lines.push('');
+    lines.push('💀 **CRITICAL FAIL!** 💀\n' + fumbles.map(f => `  ☠️ ${f}`).join('\n'));
+  }
 
   for (const roll of result.dieRolls || []) {
     lines.push(`  ${roll.count}d${roll.sides}: [${roll.rawRolls.join(', ')}]`);
@@ -33,9 +62,12 @@ function formatPlain(result: RollResult): string {
 
 function formatEmbed(result: RollResult): EmbedBuilder {
   const embed = new EmbedBuilder();
+  const { crits, fumbles } = analyzeCrits(result);
 
-  // Color coding based on result
-  if (result.error) {
+  // Color coding: gold for crits, then normal rules
+  if (crits.length > 0 || fumbles.length > 0) {
+    embed.setColor(0xffd700); // gold
+  } else if (result.error) {
     embed.setColor(0xed4245);
   } else if (result.total > 0) {
     embed.setColor(0x57f287);
@@ -46,6 +78,18 @@ function formatEmbed(result: RollResult): EmbedBuilder {
   }
 
   embed.setTitle('🎲 Dice Roll').addFields({ name: 'Expression', value: `\`${result.expression}\``, inline: false });
+
+  // Critical hit / critical fail banner
+  if (crits.length > 0 || fumbles.length > 0) {
+    let banner = '';
+    if (crits.length > 0) {
+      banner += '🌟 **CRITICAL HIT!** 🌟\n' + crits.map(c => `✨ ${c}`).join('\n') + '\n';
+    }
+    if (fumbles.length > 0) {
+      banner += '💀 **CRITICAL FAIL!** 💀\n' + fumbles.map(f => `☠️ ${f}`).join('\n');
+    }
+    embed.addFields({ name: '⚡ Special', value: banner, inline: false });
+  }
 
   // Dice breakdown with color indicators
   if (result.dieRolls?.length > 0) {
